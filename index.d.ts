@@ -26,6 +26,10 @@ export interface Options {
    * default: false
    */
   externalSystemJS?: boolean
+  plugins?: {
+    modern?: any[]
+    legacy?: any[]
+  }
 }
 
 declare function createPlugin(options?: Options): Plugin

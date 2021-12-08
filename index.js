@@ -151,7 +151,8 @@ function viteLegacyPlugin(options = {}) {
           bundle,
           facadeToModernPolyfillMap,
           config.build,
-          options.externalSystemJS
+          options.externalSystemJS, 
+          options.plugins && options.plugins.modern
         )
         return
       }
@@ -182,7 +183,8 @@ function viteLegacyPlugin(options = {}) {
           // force using terser for legacy polyfill minification, since esbuild
           // isn't legacy-safe
           config.build,
-          options.externalSystemJS
+          options.externalSystemJS,
+          options.plugins && options.plugins.legacy
         )
       }
     }
@@ -557,6 +559,8 @@ function detectPolyfills(code, targets, list) {
  * @param {import('rollup').OutputBundle} bundle
  * @param {Map<string, string>} facadeToChunkMap
  * @param {import('vite').BuildOptions} buildOptions
+ * @param {boolean} externalSystemJS
+ * @param {any[]} plugins
  */
 async function buildPolyfillChunk(
   name,
@@ -564,7 +568,8 @@ async function buildPolyfillChunk(
   bundle,
   facadeToChunkMap,
   buildOptions,
-  externalSystemJS
+  externalSystemJS,
+  plugins
 ) {
   let { minify, assetsDir } = buildOptions
   minify = minify ? 'terser' : false
@@ -573,7 +578,7 @@ async function buildPolyfillChunk(
     root: __dirname,
     configFile: false,
     logLevel: 'error',
-    plugins: [polyfillsPlugin(imports, externalSystemJS)],
+    plugins: [polyfillsPlugin(imports, externalSystemJS)].concat(plugins),
     build: {
       write: false,
       target: false,
