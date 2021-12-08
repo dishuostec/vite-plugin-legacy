@@ -6,10 +6,18 @@ const MagicString = require('magic-string').default
 
 // lazy load babel since it's not used during dev
 let babel
+let presetEnv
 /**
- * @return {import('@babel/standalone')}
+ * @return {{babel:import('@babel/core'),presetEnv:import('@babel/preset-env')}}
  */
-const loadBabel = () => babel || (babel = require('@babel/standalone'))
+const loadBabel = () => {
+  if (!babel) {
+    babel = require('@babel/core')
+    presetEnv = require('@babel/preset-env')
+  }
+
+  return { babel, presetEnv }
+}
 
 const {
   safari10NoModuleFix,
@@ -303,7 +311,8 @@ function viteLegacyPlugin(options = {}) {
 
       // transform the legacy chunk with @babel/preset-env
       const sourceMaps = !!config.build.sourcemap
-      const { code, map } = loadBabel().transform(raw, {
+      const { babel, presetEnv } = loadBabel()
+      const { code, map } = babel.transform(raw, {
         babelrc: false,
         configFile: false,
         compact: true,
@@ -322,7 +331,7 @@ function viteLegacyPlugin(options = {}) {
             })
           ],
           [
-            'env',
+            presetEnv,
             {
               targets,
               modules: false,
@@ -510,13 +519,14 @@ function viteLegacyPlugin(options = {}) {
  * @param {Set<string>} list
  */
 function detectPolyfills(code, targets, list) {
-  const { ast } = loadBabel().transform(code, {
+  const { babel, presetEnv } = loadBabel()
+  const { ast } = babel.transform(code, {
     ast: true,
     babelrc: false,
     configFile: false,
     presets: [
       [
-        'env',
+        presetEnv,
         {
           targets,
           modules: false,
