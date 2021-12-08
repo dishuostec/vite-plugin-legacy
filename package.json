@@ -1,13 +1,14 @@
 {
   "name": "@dishuostec/vite-plugin-legacy",
-  "version": "1.6.2",
+  "version": "1.6.3",
   "license": "MIT",
   "files": [
     "index.js",
-    "index.d.ts"
+    "index.d.ts",
+    "constants.js",
+    "constants.d.ts"
   ],
-  "type": "module",
-  "module": "index.js",
+  "main": "index.js",
   "types": "index.d.ts",
   "scripts": {
   },
@@ -15,11 +16,11 @@
     "node": ">=12.0.0"
   },
   "dependencies": {
-    "@babel/standalone": "^7.15.7",
-    "core-js": "^3.18.1",
+    "@babel/standalone": "^7.16.4",
+    "core-js": "^3.19.1",
     "magic-string": "^0.25.7",
     "regenerator-runtime": "^0.13.9",
-    "systemjs": "^6.10.3"
+    "systemjs": "^6.11.0"
   },
   "peerDependencies": {
     "vite": "^2.0.0"
