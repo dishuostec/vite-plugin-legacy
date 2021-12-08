@@ -1,6 +1,6 @@
 {
   "name": "@dishuostec/vite-plugin-legacy",
-  "version": "1.6.3",
+  "version": "1.6.4-alpha.1",
   "license": "MIT",
   "files": [
     "index.js",
